@@ -94,19 +94,19 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@reference())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   blameUrl: ->
-    "#{@githubRepoUrl()}/blame/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@githubRepoUrl()}/blame/#{@encodeSegments(@reference())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   historyUrl: ->
-    "#{@githubRepoUrl()}/commits/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@githubRepoUrl()}/commits/#{@encodeSegments(@reference())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   branchCompareUrl: ->
-    "#{@githubRepoUrl()}/compare/#{@encodeSegments(@branchName())}"
+    "#{@githubRepoUrl()}/compare/#{@encodeSegments(@reference())}"
 
   encodeSegments: (segments='') ->
     segments = segments.split('/')
@@ -167,3 +167,20 @@ class GitHubFile
     return shortBranch unless branchMerge.indexOf('refs/heads/') is 0
 
     branchMerge.substring(11)
+
+  # Internal
+  referenceTarget: ->
+    upstreamBranch = @repo.getUpstreamBranch(@filePath)
+    return @branchName() unless upstreamBranch?.length > 0
+
+    target = @repo.getReferenceTarget(upstreamBranch, @filePath)
+    return @branchName() unless target?.length > 0
+
+    target
+
+  # Internal
+  reference: ->
+    if atom.config.get('open-on-github.useCommitPermalinkInUrls')
+      @referenceTarget()
+    else
+      @branchName()

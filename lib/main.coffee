@@ -5,6 +5,9 @@ module.exports =
     includeLineNumbersInUrls:
       default: true
       type: 'boolean'
+    useCommitPermalinkInUrls:
+      default: false
+      type: 'boolean'
 
   activate: ->
     atom.commands.add 'atom-pane',
