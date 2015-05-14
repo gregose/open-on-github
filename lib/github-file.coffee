@@ -58,7 +58,9 @@ class GitHubFile
     if lineRange and atom.config.get('open-on-github.includeLineNumbersInUrls')
       lineRange = Range.fromObject(lineRange)
       startRow = lineRange.start.row + 1
-      endRow = lineRange.end.row + 1
+      endRow = lineRange.end.row
+      endRow += 1 unless lineRange.end.column is 0
+
       if startRow is endRow
         "#L#{startRow}"
       else
