@@ -27,6 +27,10 @@ module.exports =
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())
 
+      'open-on-github:copy-markdown-link': ->
+        if itemPath = getActivePath()
+          GitHubFile.fromPath(itemPath).copyMarkdownLink(getSelectedRange())
+
       'open-on-github:branch-compare': ->
         if itemPath = getActivePath()
           GitHubFile.fromPath(itemPath).openBranchCompare()

@@ -42,6 +42,12 @@ class GitHubFile
     else
       @reportValidationErrors()
 
+  copyMarkdownLink: (lineRange) ->
+    if @isOpenable()
+      atom.clipboard.write(@markdownLink(@blobUrl() + @getLineRangeSuffix(lineRange)))
+    else
+      @reportValidationErrors()
+
   openBranchCompare: ->
     if @isOpenable()
       @openUrlInBrowser(@branchCompareUrl())
@@ -109,6 +115,10 @@ class GitHubFile
   # Internal
   branchCompareUrl: ->
     "#{@githubRepoUrl()}/compare/#{@encodeSegments(@reference())}"
+
+  # Internal
+  markdownLink: (url) ->
+    "[](#{url})"
 
   encodeSegments: (segments='') ->
     segments = segments.split('/')
